@@ -1,4 +1,5 @@
 from ursina import *
+import worldgen
 
 class mainMenu(Entity):
      def __init__(self, **kwargs):
@@ -6,7 +7,9 @@ class mainMenu(Entity):
         self.main_menu = Entity(parent=self, enabled=True)
         self.options_menu = Entity(parent=self, enabled=False)
         self.help_menu = Entity(parent=self, enabled=False)
-
+        self.choose = Entity(parent=self, enabled=False)
+        self.gameslist = Entity(parent=self, enabled=False)
+        self.minecraft = Entity(parent=self, enabled=False)
         self.background = Sprite('shore', color=color.dark_gray, z=1)
 
         Text("MAIN MENU", parent=self.main_menu, y=0.4, x=0, origin=(0,0))
@@ -15,24 +18,49 @@ class mainMenu(Entity):
             menu1.enable()
             menu2.disable()
 
-        # Button list
+        # 1st button of main menu
         ButtonList(button_dict={
-            # changer par worldgen après test
-            "Start": Func(print_on_screen,"You clicked on Start button!", position=(0,.1), origin=(0,0)),
+            # 
+            "Start": Func(lambda: switch(self.choose, self.main_menu)),
             "Options": Func(lambda: switch(self.options_menu, self.main_menu)),
             "Help": Func(lambda: switch(self.help_menu, self.main_menu)),
             "Exit": Func(lambda: application.quit())
         },y=0,parent=self.main_menu)
+        #when press show a choosing menu 
+        Text ("Start Menu", parent=self.choose, y=0.4, x=0, origin=(0, 0))
 
+        #list of button of Start menu
+        ButtonList (button_dict={
+            "Games": Func(lambda: switch(self.gameslist, self.choose)),
+            "Server": Func(print_on_screen,"You clicked on server button!", position=(0,.1), origin=(0,0)),
+            "Create games": Func(print_on_screen,"You clicked on create games button!", position=(0,.1), origin=(0,0)),
+        }, y=0, parent=self.choose)
+
+        Button("Back",parent=self.choose,y=-0.3,scale=(0.1,0.05),color=rgb(50,50,50),
+               on_click=lambda: switch(self.main_menu, self.choose))
+        
+        #when games is press show this 
+        Text ("Games list", parent=self.gameslist, y=0.4, x=0, origin=(0, 0))
+
+                #list of games
+        ButtonList (button_dict={
+            "Minecraft": Func(lambda: switch(self.minecraft, self.main_menu)),
+            "Counter-Strike": Func(print_on_screen,"You clicked on counter strike button!", position=(0,.1), origin=(0,0)),
+            "idk for now": Func(print_on_screen,"You clicked on create games button!", position=(0,.1), origin=(0,0)),
+        }, y=0, parent=self.gameslist)
+
+        Button("Back",parent=self.gameslist,y=-0.3,scale=(0.1,0.05),color=rgb(50,50,50),
+        on_click=lambda: switch(self.choose, self.gameslist))
+        #when press  show menu to change option 
         Text ("OPTIONS MENU", parent=self.options_menu, y=0.4, x=0, origin=(0, 0))
 
-        # Button
         Button("Back",parent=self.options_menu,y=-0.3,scale=(0.1,0.05),color=rgb(50,50,50),
                on_click=lambda: switch(self.main_menu, self.options_menu))
         
+        #when press show a help menu about the games, how to set servers...
         Text ("HELP MENU", parent=self.help_menu, y=0.4, x=0, origin=(0, 0))
 
-        # Button list
+        # menu list
         ButtonList (button_dict={
             "Gameplay": Func(print_on_screen,"You clicked on Gameplay help button!", position=(0,.1), origin=(0,0)),
             "Battle": Func(print_on_screen,"You clicked on Battle help button!", position=(0,.1), origin=(0,0)),
