@@ -1,6 +1,7 @@
 from ursina import *
 import worldgen
 
+
 class mainMenu(Entity):
      def __init__(self, **kwargs):
         super().__init__(parent=camera.ui, ignore_paused=True)
@@ -41,10 +42,11 @@ class mainMenu(Entity):
         
         #when games is press show this 
         Text ("Games list", parent=self.gameslist, y=0.4, x=0, origin=(0, 0))
+        import minecraft
 
                 #list of games
         ButtonList (button_dict={
-            "Minecraft": Func(lambda: switch(self.minecraft, self.main_menu)),
+            "Minecraft": Func(minecraft.gamesStart()),
             "Counter-Strike": Func(print_on_screen,"You clicked on counter strike button!", position=(0,.1), origin=(0,0)),
             "idk for now": Func(print_on_screen,"You clicked on create games button!", position=(0,.1), origin=(0,0)),
         }, y=0, parent=self.gameslist)
